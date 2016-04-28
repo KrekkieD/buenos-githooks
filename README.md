@@ -6,13 +6,13 @@ A utility to easily install your GIT hooks and keep them under version control.
 
 Install the module as a devDependency:
 
-```bash
+```shell
 $ npm install --save-dev buenos-githooks
 ```
 
 Next you will need to install the GIT hooks: 
 
-```bash
+```shell
 $ ./node_modules/.bin/buenos-githooks
 ```
 
@@ -27,6 +27,8 @@ Note that you can pass a `--force` flag to overwrite any existing hooks, and a `
     }
 }
 ```
+
+Alternatively you can rename `postinstall` to something like `install-githooks` and run it manually with `$ npm run install-githooks`.
 
 ## Implementing hooks
 
@@ -45,3 +47,10 @@ Create a folder called `.git-hooks` which you should place in the root directory
 In this case the scripts `./.git-hooks/pre-commit/unit-test.sh` and `./.git-hooks/pre-commit/jscs.js` will run when the `pre-commit` hook fires. 
 
 Note that the files should be executable, so make sure your file permissions are okay. Usually a `chmod +x path/to/file` fixes it.
+
+Your script should have an `exit code` that is `> 0` to fail. Note that all scripts will be executed but if one fails the action will be aborted.
+
+**PRO-TIP:** adding `#!/usr/bin/env node` to the top of javascript files will allow you to run them :)
+
+**PRO-TIP 2:** make sure your `.sh` scripts use proper line endings (`LF` and not `CR` or `CRLF`). You can use a `.gitattributes` file to make sure they're not messed up automatically by GIT.
+ 
