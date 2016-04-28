@@ -14,7 +14,9 @@ module.exports = {
 
 function installHooks () {
 
-    var moduleRoot = $upTheTree();
+    var moduleRoot = $upTheTree(null, {
+        start: __dirname
+    });
     var gitRoot = _findGitRoot();
 
     if (!gitRoot) {
