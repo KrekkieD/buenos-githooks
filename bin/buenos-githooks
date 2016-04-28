@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+
+var $path = require('path');
+var $buenosGithooks = require($path.resolve(__dirname, '..'));
+
+$buenosGithooks.installHooks();

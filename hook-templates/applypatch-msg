@@ -1,0 +1,46 @@
+#!/bin/sh
+
+hook=`basename $0`
+exitcodes=()
+GIT_DIR=$(git rev-parse --git-dir)
+
+
+function runHook {
+
+    # tell the user what file we're executing
+    printf "$hook: "
+    printf ${1##*/}
+    printf ".."
+
+    # execute the command and mute the output
+    "$@" >/dev/null 2>/dev/null
+
+    # catch the exit code
+    local status=$?
+
+    # evaluate exit code
+    if [ $status -ne 0 ]; then
+        echo "FAILED"
+        # echo "error with $1" >&2
+    else
+        echo "OK"
+    fi
+
+    return $status
+}
+
+FILES=$GIT_DIR/../.git-hooks/$hook/*
+for f in $FILES
+do
+
+    runHook $f
+    err=($?)
+    exitcodes+=($err)
+
+done
+
+for i in "${exitcodes[@]}"; do
+    [ "$i" == 0 ] || { echo "GIT action aborted."; exit $i; }
+done
+
+echo "Hooks ran successfully"
