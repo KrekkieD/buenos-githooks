@@ -1,6 +1,6 @@
 {
   "name": "buenos-githooks",
-  "version": "0.0.1-0",
+  "version": "0.0.1-1",
   "description": "Utility to install GIT hooks, allows you to version control your GIT hooks",
   "main": "index.js",
   "bin": {
