@@ -7,7 +7,11 @@
     "buenos-githooks": "bin/buenos-githooks"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install-githooks-fs": "./bin/buenos-githooks --force --silent",
+    "install-githooks-f": "./bin/buenos-githooks --force",
+    "install-githooks-s": "./bin/buenos-githooks --silent",
+    "install-githooks": "./bin/buenos-githooks"
   },
   "repository": {
     "type": "git",
@@ -26,6 +30,7 @@
   },
   "dependencies": {
     "colors": "^1.1.2",
-    "up-the-tree": "^0.3.2"
+    "up-the-tree": "^0.3.2",
+    "yargs": "^4.6.0"
   }
 }

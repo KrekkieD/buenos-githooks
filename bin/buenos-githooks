@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 
 var $path = require('path');
+
 var $buenosGithooks = require($path.resolve(__dirname, '..'));
 
-$buenosGithooks.installHooks();
+var $yargs = require('yargs');
+
+$buenosGithooks.installHooks({
+    force: !!$yargs.argv.force,
+    silent: !!$yargs.argv.silent
+});

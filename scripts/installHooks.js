@@ -1,7 +1,5 @@
 'use strict';
 
-// booger
-
 var $fs = require('fs');
 var $path = require('path');
 
@@ -12,7 +10,7 @@ module.exports = {
     installHooks: installHooks
 };
 
-function installHooks () {
+function installHooks (config) {
 
     var moduleRoot = $upTheTree(null, {
         start: __dirname
@@ -20,8 +18,12 @@ function installHooks () {
     var gitRoot = _findGitRoot();
 
     if (!gitRoot) {
-        _error('Cannot find GIT root, are you in a GIT repository?', 'error');
-        _exit();
+
+        if (!config.silent) {
+            _error('Cannot find GIT root, are you in a GIT repository?', 'error');
+        }
+
+        return _exit();
     }
 
     var hooks = _getInstalledHooks(gitRoot);
@@ -33,13 +35,19 @@ function installHooks () {
 
         if (hooks.indexOf(hookName) > -1) {
             errorCount++;
-            _error('hook with name ' + hookName + ' already exists', 'error');
+
+            if (!config.silent) {
+                _error('hook with name ' + hookName + ' already exists', 'error');
+            }
         }
 
     });
 
-    if (errorCount > 0) {
-        _exit();
+    if (errorCount > 0 && !config.force) {
+        if (!config.silent) {
+            _error('Errors occured, aborting.');
+        }
+        return _exit();
     }
 
     var templatesRoot = $path.resolve(moduleRoot, 'hook-templates');
@@ -51,7 +59,11 @@ function installHooks () {
     // copy the hook templates
     _copyTemplates(hookSources, hookTargets);
 
-    _success('GIT hooks successfully installed');
+    if (!config.silent) {
+        _success('GIT hooks successfully installed');
+    }
+
+    return true;
 
 }
 
@@ -139,7 +151,11 @@ function _success (msg) {
 
 function _exit () {
 
-    _error('Errors occured, aborting');
-    process.exit(1);
+    if (!module.parent) {
+        process.exit(1);
+    }
+    else {
+        return false;
+    }
 
 }
