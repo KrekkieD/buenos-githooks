@@ -29,18 +29,28 @@ function runHook {
     return $status
 }
 
-FILES=$GIT_DIR/../.git-hooks/$hook/*
-for f in $FILES
-do
+hookdirectory=$GIT_DIR/../.git-hooks/$hook/
 
-    runHook $f
-    err=($?)
-    exitcodes+=($err)
+if [ -d "$hookdirectory" ]; then
 
-done
+  FILES=$hookdirectory*
+  for f in $FILES
+  do
 
-for i in "${exitcodes[@]}"; do
-    [ "$i" == 0 ] || { echo "GIT action aborted."; exit $i; }
-done
+      echo "$f"
+      runHook $f
+      err=($?)
+      exitcodes+=($err)
 
-echo "Hooks ran successfully"
+  done
+
+  for i in "${exitcodes[@]}"; do
+      [ "$i" == 0 ] || { echo "GIT action aborted."; exit $i; }
+  done
+
+  echo "Hooks ran successfully"
+
+else
+    echo "no hooks"
+fi
+

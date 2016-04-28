@@ -74,6 +74,8 @@ function _copyTemplates (hookSources, hookTargets) {
             $fs.readFileSync(hookSources[key])
         );
 
+        $fs.chmodSync(hookTargets[key], '0755');
+
     });
 
 }
