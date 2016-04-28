@@ -49,6 +49,8 @@ function installHooks () {
     // copy the hook templates
     _copyTemplates(hookSources, hookTargets);
 
+    _success('GIT hooks successfully installed');
+
 }
 
 function _prependPathToFiles (path, files) {
@@ -122,6 +124,12 @@ function _error (msg, type) {
     }
 
     console.error($colors.red(errorMessage));
+
+}
+
+function _success (msg) {
+
+    console.error($colors.green(msg));
 
 }
 
