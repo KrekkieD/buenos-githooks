@@ -37,7 +37,6 @@ if [ -d "$hookdirectory" ]; then
   for f in $FILES
   do
 
-      echo "$f"
       runHook $f
       err=($?)
       exitcodes+=($err)
