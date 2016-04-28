@@ -48,9 +48,9 @@ if [ -d "$hookdirectory" ]; then
       [ "$i" == 0 ] || { echo "GIT action aborted."; exit $i; }
   done
 
-  echo "Hooks ran successfully"
+  echo "Hooks for $hook ran successfully"
 
 else
-    echo "no hooks"
+    echo "No hooks for $hook"
 fi
 
