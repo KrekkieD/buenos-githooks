@@ -33,21 +33,34 @@ hookdirectory=$GIT_DIR/../.git-hooks/$hook/
 
 if [ -d "$hookdirectory" ]; then
 
-  FILES=$hookdirectory*
-  for f in $FILES
-  do
+    FILES=$hookdirectory*
+    for f in $FILES
+    do
 
-      runHook $f
-      err=($?)
-      exitcodes+=($err)
+        if ! [[ -x "$f" ]]
+        then
+            printf "File '$f' is not executable, attempting chmod.. "
+            chmod +x $f
 
-  done
+            if ! [[ -x "$f" ]]; then
+                echo "Failed."
+            else
+                echo "Succeeded."
+            fi
 
-  for i in "${exitcodes[@]}"; do
-      [ "$i" == 0 ] || { echo "GIT action aborted."; exit $i; }
-  done
+        fi
 
-  echo "Hooks for $hook ran successfully"
+        runHook $f
+        err=($?)
+        exitcodes+=($err)
+
+    done
+
+    for i in "${exitcodes[@]}"; do
+        [ "$i" == 0 ] || { echo "GIT action aborted."; exit $i; }
+    done
+
+    echo "Hooks for $hook ran successfully"
 
 else
     echo "No hooks for $hook"
